@@ -1,5 +1,8 @@
 # twitter
 A demo twitter app
+![Alt text](https://github.com/hassank/twitter/blob/master/TwitterLice.gif "Twitter")
+
+
 
 Time taken: ~13 hours
 
