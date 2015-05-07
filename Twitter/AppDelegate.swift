@@ -17,11 +17,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+        // For Twitter Redux
+        
+        var hamburgerViewController = storyboard.instantiateViewControllerWithIdentifier("HamburgerViewController") as! HamburgerViewController
+        
+        var menuVC = storyboard.instantiateViewControllerWithIdentifier("MenuViewController") as!  MenuViewController
+        
+        var tweetsVC = storyboard.instantiateViewControllerWithIdentifier("TweetsViewController") as! TweetsViewController
+        
+        var mentionsVC = storyboard.instantiateViewControllerWithIdentifier("MentionsViewController") as! MentionsViewController
+        
+        
+        hamburgerViewController.menuViewController = menuVC
+        hamburgerViewController.contentViewController = tweetsVC
+        
+        mentionsVC.hamburgerVC = hamburgerViewController
+        tweetsVC.hamburgerVC = hamburgerViewController
+        menuVC.hamburgerVC = hamburgerViewController
+
+
+        /* For Twitter V1
         UINavigationBar.appearance().barTintColor = UIColor(red: 85.0/255.0, green: 172.0/255.0, blue: 238.0/255.0, alpha: 0.2)
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "userDidLogout", name: userDidLogoutNotification, object: nil)
+        
         
         if User.currentUser != nil {
             // go to logged in screen
@@ -30,6 +51,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window?.rootViewController = vc
         }
         
+        
+        var loginViewController = storyboard.instantiateViewControllerWithIdentifier("Login") as! LoginController
+        */
+        
+        self.window?.rootViewController = hamburgerViewController
+
         return true
     }
     

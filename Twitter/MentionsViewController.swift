@@ -8,11 +8,9 @@
 
 import UIKit
 
-class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
-    @IBOutlet weak var tableView: UITableView!
+class MentionsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    @IBOutlet weak var tweetButton: UIButton!
+    @IBOutlet weak var tableView: UITableView!
     
     var hamburgerVC: HamburgerViewController?
     
@@ -30,31 +28,32 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.estimatedRowHeight = 160.0
         
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: "fetchTweets", forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl.addTarget(self, action: "fetchMentions", forControlEvents: UIControlEvents.ValueChanged)
         
         let dummyTableVC = UITableViewController()
         dummyTableVC.tableView = tableView
         dummyTableVC.refreshControl = refreshControl
         
-        fetchTweets()
+        fetchMentions()
     }
     
-    
-    func fetchTweets() {
-        TwitterClient.sharedInstance.homeTimelineWithParams(nil, completion: {
-                (tweets, error) -> () in
-                if error == nil {
-                    println("Retrieved Tweets")
-                    self.tweets = tweets
-                    self.tableView.reloadData()
-                    self.refreshControl.endRefreshing()
-                } else {
-                    println(error)
-                }
-            })
+    func fetchMentions() {
+        TwitterClient.sharedInstance.mentionsTimeline(nil, completion: {
+            (tweets, error) -> () in
+            if error == nil {
+                println("Retrieved Tweets")
+                self.tweets = tweets
+                self.tableView.reloadData()
+                self.refreshControl.endRefreshing()
+                println("Mentions")
+                println(tweets)
+            } else {
+                println(error)
+            }
+        })
         // Do any additional setup after loading the view.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -89,20 +88,6 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         return cell
     }
     
-    @IBAction func imageTapped(sender: UITapGestureRecognizer) {
-        println("Image Tapped")
-        var img = sender.view! as UIView
-        var content = img.superview! as UIView
-        var cell = content.superview! as! TweetCell
-        var cellNum = tableView.indexPathForCell(cell)!.row
-                
-        var profileVC = storyboard?.instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
-        var tweet = tweets![cellNum] as Tweet
-        profileVC.user = tweet.user
-        self.hamburgerVC!.contentViewController = profileVC
-    }
-    
-    
     func getTimeAgo(tweet: Tweet) -> String {
         var createdAt = tweet.createdAt!
         let timeAgo = Int(createdAt.timeIntervalSinceNow * -1.0)
@@ -110,7 +95,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         if (timeAgo < 120) {
             return "1 m"
         }
-            
+        
         var minsAgo = timeAgo/60
         if (minsAgo < 60) {
             return "\(minsAgo) m"
@@ -120,7 +105,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         if (hoursAgo < 24) {
             return "\(hoursAgo) h"
         }
-
+        
         var daysAgo = hoursAgo/24
         return "\(daysAgo) d"
     }
@@ -145,8 +130,6 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
             }
         })
     }
-    
-    
     
     @IBAction func favoriteTouched(sender: UIButton) {
         println("Favoriting")
@@ -174,12 +157,12 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     
     
     // MARK: - Navigation
-
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-    
+        
         if (segue.identifier! == "TweetSegue") {
             println("Navigating to Tweet View")
             var tweetView = segue.destinationViewController as! TweetViewController
