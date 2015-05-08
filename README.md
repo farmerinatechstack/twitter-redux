@@ -7,6 +7,7 @@ A slight redux of the demo twitter app
 
 
 Time taken: ~10 hours
+
 [x]Hamburger menu
 
 Dragging anywhere in the view should reveal the menu.
@@ -22,4 +23,5 @@ Contains the user header view
 Contains a section with the users basic stats: # tweets, # following, # followers
 
 [x]Home Timeline
+
 Tapping on a user image should bring up that user's profile page
