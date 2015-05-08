@@ -2,7 +2,7 @@
 A slight redux of the demo twitter app
 
 
-![Alt text](https://github.com/hassank/twitter/blob/master/TwitterReduxLice.gif "Twitter")
+![Alt text](https://github.com/hassank/twitter-redux/blob/master/TwitterReduxLice.gif "Twitter Redux")
 
 
 
